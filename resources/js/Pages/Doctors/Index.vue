@@ -4,7 +4,7 @@
       <h1 class="text-3xl font-bold">Listado de Doctores</h1>
 
       <Link
-        :href="route('doctors.create')"
+        :href="`/doctors/create`"
         class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow"
       >
         + Nuevo Doctor
@@ -40,14 +40,14 @@
           <td class="px-4 py-2 text-center">
             <div class="flex justify-center gap-2">
               <Link
-                :href="route('doctors.show', doctor.slug)"
+                :href="`/doctors/${doctor.slug}`"
                 class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
               >
                 Ver
               </Link>
 
               <Link
-                :href="route('doctors.edit', doctor.slug)"
+                :href="`/doctors/${doctor.slug}/edit`"
                 class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
               >
                 Editar
@@ -76,7 +76,8 @@ const props = defineProps({
 
 const deleteDoctor = (slug) => {
   if (confirm('¿Seguro que deseas eliminar este doctor?')) {
-    router.delete(route('doctors.destroy', slug), {
+    // Use explicit URL to avoid relying on route() in the script runtime
+    router.delete(`/doctors/${slug}`, {
       onSuccess: () => {
         alert('Doctor eliminado correctamente ✅')
       },

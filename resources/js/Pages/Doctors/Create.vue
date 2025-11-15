@@ -6,6 +6,7 @@
       <div>
         <label class="block mb-1 font-semibold">Nombre</label>
         <input v-model="form.name" type="text" class="border rounded p-2 w-full" required />
+        <div v-if="form.errors.name" class="text-red-600 text-sm mt-1">{{ form.errors.name }}</div>
       </div>
 
       <div>
@@ -18,23 +19,27 @@
       <div>
         <label class="block mb-1 font-semibold">Biografía</label>
         <textarea v-model="form.bio" class="border rounded p-2 w-full"></textarea>
+        <div v-if="form.errors.bio" class="text-red-600 text-sm mt-1">{{ form.errors.bio }}</div>
       </div>
 
       <div>
         <label class="block mb-1 font-semibold">Teléfono</label>
-        <input v-model="form.phone" type="number" class="border rounded p-2 w-full" />
+        <input v-model="form.phone" type="text" class="border rounded p-2 w-full" />
+        <div v-if="form.errors.phone" class="text-red-600 text-sm mt-1">{{ form.errors.phone }}</div>
       </div>
 
       <div>
         <label class="block mb-1 font-semibold">Correo electrónico</label>
         <input v-model="form.email" type="email" class="border rounded p-2 w-full" required />
+        <div v-if="form.errors.email" class="text-red-600 text-sm mt-1">{{ form.errors.email }}</div>
       </div>
 
       <div class="flex gap-3 mt-6">
-        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
-          Guardar
+        <button :disabled="form.processing" type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded disabled:opacity-60">
+          <span v-if="form.processing">Guardando...</span>
+          <span v-else>Guardar</span>
         </button>
-        <Link :href="route('doctors.index')" class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">
+        <Link :href="`/doctors`" class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">
           Cancelar
         </Link>
       </div>
@@ -54,6 +59,13 @@ const form = useForm({
 })
 
 const submit = () => {
-  form.post(route('doctors.store'))
+  form.post('/doctors', {
+    onSuccess: () => {
+      // success redirect handled by Inertia; no-op here
+    },
+    onError: () => {
+      // errors are populated in form.errors and displayed inline
+    }
+  })
 }
 </script>

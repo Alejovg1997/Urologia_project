@@ -2,7 +2,7 @@
   <div class="p-8 max-w-lg">
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-2xl font-bold">Nueva Disponibilidad</h1>
-      <Link :href="route('availabilities.index')" class="text-sm text-blue-600">Volver</Link>
+      <Link :href="`/availabilities`" class="text-sm text-blue-600">Volver</Link>
     </div>
 
     <form @submit.prevent="submit">
@@ -35,7 +35,7 @@
 
       <div class="flex gap-2">
         <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Guardar</button>
-        <Link :href="route('availabilities.index')" class="px-4 py-2 border rounded">Cancelar</Link>
+        <Link :href="`/availabilities`" class="px-4 py-2 border rounded">Cancelar</Link>
       </div>
     </form>
   </div>
@@ -59,7 +59,7 @@ const form = ref({
 })
 
 const submit = () => {
-  router.post(route('availabilities.store'), form.value, {
+  router.post('/availabilities', form.value, {
     onSuccess: () => {
       alert('Disponibilidad creada ✅')
     },

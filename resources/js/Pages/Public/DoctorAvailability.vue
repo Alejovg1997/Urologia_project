@@ -104,7 +104,7 @@ function submitBooking() {
 
         <div class="flex gap-4 mb-4">
             <select v-model="selectedDoctor" class="border rounded px-3 py-2">
-                <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name }} — {{ d.specialty }}</option>
+                <option v-for="d in doctors" :key="d.id" :value="d.slug">{{ d.name }} — {{ d.specialty }}</option>
             </select>
 
             <button class="px-3 py-2 bg-gray-200 rounded" @click.prevent="weekStart = new Date(new Date(weekStart).setDate(new Date(weekStart).getDate()-7)); loadSlots()">Semana anterior</button>

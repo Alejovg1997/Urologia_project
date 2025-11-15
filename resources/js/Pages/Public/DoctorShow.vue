@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
-const props = defineProps({ doctor: Object })
+const { doctor } = defineProps({ doctor: Object })
 
 const slotsByDay = ref([])
 const loading = ref(false)
@@ -10,7 +10,9 @@ const error = ref(null)
 onMounted(async () => {
   loading.value = true
   try {
-    const res = await axios.get(route('public.doctor.availability', props.doctor.slug))
+    // Build the public availability URL directly to avoid depending on the `route()` helper at runtime
+    const url = `/public/doctors/${doctor.slug}/availability`
+    const res = await axios.get(url)
     slotsByDay.value = res.data.slots_by_day ?? []
   } catch (e) {
     error.value = 'Error cargando disponibilidades'

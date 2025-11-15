@@ -5,6 +5,7 @@ import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from 'ziggy-js';
+import { Ziggy } from './ziggy';
 import Header from './Shared/Header.vue';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
@@ -22,7 +23,7 @@ createInertiaApp({
 
         return createApp(Root)
             .use(plugin)
-            .use(ZiggyVue)
+            .use(ZiggyVue, typeof Ziggy !== 'undefined' ? Ziggy : (typeof window !== 'undefined' && window.Ziggy ? window.Ziggy : {}))
             .mount(el);
     },
     progress: {

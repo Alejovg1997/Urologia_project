@@ -15,4 +15,16 @@ class DoctorController extends Controller
             'doctor' => $doctor,
         ]);
     }
+
+    /**
+     * Mostrar listado público de doctores.
+     */
+    public function indexPublic()
+    {
+        $doctors = Doctor::orderBy('created_at', 'desc')->get();
+
+        return Inertia::render('Public/DoctorsIndex', [
+            'doctors' => $doctors,
+        ]);
+    }
 }

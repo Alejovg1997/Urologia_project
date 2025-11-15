@@ -57,8 +57,20 @@ Route::get('/', function () {
 
 // Public endpoints for viewing availability and booking
 Route::get('/public/availability', [PublicAvailabilityController::class, 'index'])->name('public.availability.index');
-Route::get('/public/doctors/{doctor}/availability', [PublicAvailabilityController::class, 'week'])->name('public.doctor.availability');
+// Bind by slug for public access (slugs are stable and user-friendly)
+Route::get('/public/doctors/{doctor:slug}/availability', [PublicAvailabilityController::class, 'week'])->name('public.doctor.availability');
 Route::post('/public/appointments', [PublicAppointmentController::class, 'store'])->name('public.appointments.store');
+
+// Public list of doctors
+Route::get('/public/doctors', [\App\Http\Controllers\Frontend\DoctorController::class, 'indexPublic'])->name('public.doctors.index');
+
+// Dev-only: clear all doctor availabilities inserted by seeders to allow testing
+if (app()->environment('local') || env('APP_DEBUG')) {
+    Route::post('/dev/availabilities/clear', function () {
+        \App\Models\DoctorAvailability::query()->delete();
+        return response()->json(['success' => true, 'message' => 'All doctor availabilities cleared (dev).']);
+    })->name('dev.availabilities.clear');
+}
 
 // Public doctor profile (shows doctor & lets frontend fetch availability)
 Route::get('/doctors/{doctor:slug}', [\App\Http\Controllers\Frontend\DoctorController::class, 'show'])->name('public.doctors.show');
