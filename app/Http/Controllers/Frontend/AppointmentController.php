@@ -50,8 +50,9 @@ class AppointmentController extends Controller
         // send notification email to patient
         try {
             Mail::to($appointment->patient_email)->send(new AppointmentCreated($appointment));
+            \Log::info('AppointmentCreated email sent', ['appointment_id' => $appointment->id, 'to' => $appointment->patient_email]);
         } catch (\Throwable $e) {
-            // don't block creation on mail failures; log if needed
+            \Log::error('Failed to send AppointmentCreated email', ['error' => $e->getMessage(), 'appointment_id' => $appointment->id, 'to' => $appointment->patient_email]);
         }
 
         return response()->json(['success' => true, 'message' => 'Cita solicitada correctamente.', 'appointment' => $appointment], 201);

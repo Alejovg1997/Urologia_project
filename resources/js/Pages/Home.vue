@@ -12,19 +12,14 @@
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;">
           <div class="card" style="padding:1rem;border-radius:6px;background:#eef6ed;text-align:center">
             <div><strong>Agendar una cita</strong></div>
-            <div style="margin-top:.6rem;"><Link :href="`/public/availability`" class="button">Consultar / Reservar</Link></div>
+            <div style="margin-top:.6rem;"><Link :href="`/public/availability`" class="button">Reservar</Link></div>
           </div>
 
           <div class="card" style="padding:1rem;border-radius:6px;background:#eef6ed;text-align:center">
-            <div><strong>listado de doctores</strong></div>
-            <div style="margin-top:.6rem;"><Link :href="`/public/doctors`" class="button">Listado de Doctores</Link></div>
+            <div><strong>ver lista de doctores</strong></div>
+            <div style="margin-top:.6rem;"><Link :href="`/public/doctors`" class="button">Especialistas</Link></div>
           </div>
 
-
-          <div class="card" style="padding:1rem;border-radius:6px;background:#f1f5f9;text-align:center">
-            <div><strong>Reservar una cita</strong></div>
-            <div style="margin-top:.6rem;"><Link :href="`/public/appointments/new`" class="button">Ir al formulario</Link></div>
-          </div>
 
           
         </div>
@@ -40,13 +35,18 @@
           </div>
 
           <div class="card" style="padding:1rem;border-radius:6px;background:#f1f5f9;text-align:center">
+            <div><strong>Agenda doctores</strong></div>
+            <div style="margin-top:.6rem;"><Link :href="`/admin/agenda`" class="button">Agenda docotor</Link></div>
+          </div>
+
+          <div class="card" style="padding:1rem;border-radius:6px;background:#f1f5f9;text-align:center">
             <div><strong>Gestionar Disponibilidades</strong></div>
             <div style="margin-top:.6rem;"><Link :href="`/availabilities`" class="button">Ver Disponibilidades</Link></div>
           </div>
 
           <div class="card" style="padding:1rem;border-radius:6px;background:#f1f5f9;text-align:center">
             <div><strong>Gestionar Médicos</strong></div>
-            <div style="margin-top:.6rem;"><Link :href="`/doctors`" class="button">Listado / Crear</Link></div>
+            <div style="margin-top:.6rem;"><Link :href="`/doctors`" class="button">Ingreso medico</Link></div>
           </div>
 
         </div>

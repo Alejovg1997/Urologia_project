@@ -14,12 +14,23 @@ use App\Mail\AppointmentStatusChanged;
 
 class AppointmentResourceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $appointments = Appointment::with('doctor')->latest()->get();
+        $query = Appointment::with('doctor')->latest();
+
+        $doctorId = $request->query('doctor_id');
+        if ($doctorId) {
+            $query->where('doctor_id', $doctorId);
+        }
+
+        $appointments = $query->get();
+
+        $doctors = Doctor::all(['id','name','specialty']);
 
         return Inertia::render('Appointments/Index', [
             'appointments' => $appointments,
+            'doctors' => $doctors,
+            'filters' => [ 'doctor_id' => $doctorId ],
         ]);
     }
 
@@ -144,8 +155,9 @@ class AppointmentResourceController extends Controller
         // send notification to patient about status change
         try {
             Mail::to($appointment->patient_email)->send(new AppointmentStatusChanged($appointment, $validated['rejection_reason'] ?? null));
+            \Log::info('AppointmentStatusChanged email sent', ['appointment_id' => $appointment->id, 'to' => $appointment->patient_email, 'status' => $appointment->status]);
         } catch (\Throwable $e) {
-            // ignore
+            \Log::error('Failed to send AppointmentStatusChanged email', ['error' => $e->getMessage(), 'appointment_id' => $appointment->id, 'to' => $appointment->patient_email]);
         }
 
         return redirect()->back()->with('success', 'Estado de la cita actualizado.');

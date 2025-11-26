@@ -10,7 +10,7 @@
         <p class="text-sm text-gray-600">{{ doc.specialty }}</p>
         <p class="mt-2 text-gray-700 text-sm">{{ doc.bio || 'Sin biografía' }}</p>
         <div class="mt-4">
-          <Link :href="`/doctors/${doc.slug}`" class="bg-blue-500 text-white px-3 py-1 rounded">Ver perfil</Link>
+          <Link :href="`/doctors/${doc.slug}`" class="bg-blue-500 text-white px-3 py-1 rounded">Ver disponibilidad</Link>
         </div>
       </div>
     </div>

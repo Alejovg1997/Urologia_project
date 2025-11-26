@@ -18,16 +18,11 @@ const props = defineProps({
                     <option value="">Seleccione médico...</option>
                     <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name }} — {{ d.specialty }}</option>
                 </select>
-                <button v-if="selectedDoctor" @click.prevent="viewAgenda" class="px-3 py-2 bg-blue-600 text-white rounded">Ver agenda</button>
-            </div>
+                <button @click.prevent="applyFilter" class="px-3 py-2 bg-gray-200 rounded">Buscar</button>
+                </div>
 
             <div>
-                <button
-                    @click="router.visit(route('appointments.create'))"
-                    class="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded-xl shadow"
-                >
-                    Nueva Cita
-                </button>
+                
             </div>
         </div>
 
@@ -70,12 +65,7 @@ const props = defineProps({
                             </span>
                         </td>
                         <td class="px-6 py-4 text-right space-x-2">
-                            <button
-                                @click="router.visit(route('appointments.show', appointment.id))"
-                                class="bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1 rounded-lg text-sm"
-                            >
-                                Ver
-                            </button>
+                            
                             <button
                                 v-if="appointment.status === 'pendiente'"
                                 @click="accept(appointment.id)"
@@ -86,22 +76,11 @@ const props = defineProps({
                             <button
                                 v-if="appointment.status === 'pendiente'"
                                 @click="reject(appointment.id)"
-                                class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-lg text-sm"
-                            >
-                                Rechazar
-                            </button>
-                            <button
-                                @click="router.visit(route('appointments.edit', appointment.id))"
-                                class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm"
-                            >
-                                Editar
-                            </button>
-                            <button
-                                @click="destroy(appointment.id)"
                                 class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm"
                             >
-                                Eliminar
+                            Rechazar
                             </button>
+                            
                         </td>
                     </tr>
                 </tbody>
@@ -117,9 +96,18 @@ const props = defineProps({
 <script>
 export default {
     data() {
-        return { selectedDoctor: '' }
+            // initialize selectedDoctor from query param if present
+            const urlParams = new URLSearchParams(window.location.search)
+            const sel = urlParams.get('doctor_id') || ''
+            return { selectedDoctor: sel }
     },
     methods: {
+            applyFilter() {
+                // visit same index route with doctor_id query param
+                const params = {}
+                if (this.selectedDoctor) params.doctor_id = this.selectedDoctor
+                router.visit(route('appointments.index', params))
+            },
         destroy(id) {
             if (confirm('¿Seguro que deseas eliminar esta cita?')) {
                 router.delete(route('appointments.destroy', id))
@@ -127,7 +115,9 @@ export default {
         },
         viewAgenda() {
             if (!this.selectedDoctor) return;
-            router.visit(route('admin.doctor.agenda', this.selectedDoctor))
+            // Build URL directly to avoid Ziggy missing admin route in some environments
+            const url = `/admin/doctor/${this.selectedDoctor}/agenda`
+            router.visit(url)
         },
         accept(id) {
             if (!confirm('Aceptar la cita?')) return;

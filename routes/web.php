@@ -30,6 +30,8 @@ Route::middleware([
     // Admin actions for appointments
     Route::patch('admin/appointments/{appointment}/status', [AppointmentResourceController::class, 'updateStatus'])->name('admin.appointments.status');
     Route::get('admin/doctor/{doctor}/agenda', [\App\Http\Controllers\Admin\DoctorAgendaController::class, 'index'])->name('admin.doctor.agenda');
+    // Global admin agenda: confirmed appointments grouped by doctor
+    Route::get('admin/agenda', [\App\Http\Controllers\Admin\DoctorAgendaController::class, 'all'])->name('admin.agenda.all');
     // Alias route: /home -> dashboard
     Route::get('/home', function () {
         return redirect()->route('dashboard');
