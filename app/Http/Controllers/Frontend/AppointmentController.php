@@ -67,9 +67,13 @@ class AppointmentController extends Controller
             $doctor = Doctor::where('slug', $doctorSlug)->first();
         }
 
+        // Also pass list of doctors so the form can work when no doctor slug provided
+        $doctors = Doctor::all(['id','name','specialty','slug']);
+
         return Inertia::render('Public/AppointmentCreate', [
             'doctor' => $doctor,
             'start' => $start,
+            'doctors' => $doctors,
         ]);
     }
 }

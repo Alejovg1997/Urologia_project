@@ -1,14 +1,14 @@
 <script setup>
 import { ref } from 'vue'
 import axios from 'axios'
-const props = defineProps({ doctor: Object, start: String })
+const { doctor, start, doctors } = defineProps({ doctor: Object, start: String, doctors: Array })
 
 const form = ref({
-  doctor_id: props.doctor ? props.doctor.id : null,
+  doctor_id: doctor ? doctor.id : (doctors && doctors.length ? doctors[0].id : null),
   patient_name: '',
   patient_email: '',
   patient_phone: '',
-  start_time: props.start || '',
+  start_time: start || '',
   reason: '',
 })
 
@@ -55,7 +55,14 @@ async function submit() {
     </div>
 
     <div class="mt-4">
-      <button @click.prevent="submit" :disabled="submitting" class="bg-green-600 text-white px-4 py-2 rounded">Enviar</button>
+        <div v-if="!doctor">
+          <label class="block text-sm">Doctor</label>
+          <select v-model="form.doctor_id" class="w-full border p-2 rounded mb-3">
+            <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name }} — {{ d.specialty }}</option>
+          </select>
+        </div>
+
+        <button @click.prevent="submit" :disabled="submitting" class="bg-green-600 text-white px-4 py-2 rounded">Enviar</button>
     </div>
 
     <div v-if="message" class="mt-3 text-sm text-gray-700">{{ message }}</div>
